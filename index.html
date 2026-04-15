@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WebXR VR</title>
+
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+
+  <style>
+    body { margin: 0; }
+  </style>
+
+  <script>
+    // Component to handle switching cricket equipment
+    AFRAME.registerComponent('show-equipment', {
+      schema: {
+        message: { type: 'string' },
+        model: { type: 'selector' }
+      },
+
+      init: function () {
+        this.el.addEventListener('click', () => {
+          // Update the Title Text
+          document.querySelector('#infoText')
+            .setAttribute('value', this.data.message);
+
+          // Hide all 3D equipment models
+          document.querySelectorAll('.cricket-model')
+            .forEach(m => m.setAttribute('visible', false));
+
+          // Show the specific model selected
+          if (this.data.model) {
+            this.data.model.setAttribute('visible', true);
+          }
+        });
+      }
+    });
+  </script>
+</head>
+
+<body>
+
+<a-scene background="color: "skyblue">
+
+  <a-entity position="0 0 4" wasd-controls>
+    <a-entity camera look-controls position="0 1.6 0">
+      <a-cursor raycaster="objects: .clickable; far: 20" color="darkblue"></a-cursor>
+    </a-entity>
+  </a-entity>
+
+  <a-light type="ambient" intensity="0.7"></a-light>
+  <a-light type="directional" position="1 5 2" intensity="0.8"></a-light>
+
+  <a-plane position="0 -1 0" rotation="-90 0 0"
+           width="15" height="15" color="white"></a-plane> 
+  
+  <a-plane position="0 -0.99 0" rotation="-90 0 0"
+           width="2.5" height="12" color="green"></a-plane> 
+
+  <a-plane position="0 2 -6" width="12" height="6" color="yellow"></a-plane> 
+  <a-plane position="-6 2 0" rotation="0 90 0" width="12" height="6" color="yellowgreen"></a-plane>
+  <a-plane position="6 2 0" rotation="0 -90 0" width="12" height="6" color="yellowgreen"></a-plane>
+
+  <a-text id="infoText"
+          value="Animal"
+          position="0 4.5 -5.8"
+          align="center"
+          width="10"
+          color="#1D3557">
+  </a-text>
+
+  <a-entity id="bat3D" class="tiger-model"
+            gltf-model="url(tiger.glb)"
+            position="0 0 2"
+            scale="0.002 0.002 0.002"
+            visible="false"
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 8000">
+  </a-entity>
+
+
+  <a-plane class="clickable"
+           src="download."
+           position="-3 1.8 -5.9"
+           width="1.8" height="2.2"
+           show-equipment="message: MRF Willow Bat; model: #bat3D">
+  </a-plane>
+
+  
+
+</a-scene>
+
+</body>
+</html>
